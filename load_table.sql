@@ -2,14 +2,12 @@
 CREATE TABLE Products( 
     Product_Id SERIAL,
     PRIMARY KEY (Product_Id)
-
 );
 
 /* This table is to store all Categories available to Products */
 CREATE TABLE Category( 
     Category_Id SERIAL,
     PRIMARY KEY (Category_Id)
-
 );
 
 CREATE TABLE Products_to_Category(
@@ -31,7 +29,6 @@ CREATE TABLE Customer(
 CREATE TABLE Customer_Orders(
     Order_Id SERIAL,
     Customer_Id integer REFERENCES Customer(Customer_Id),
-
     PRIMARY KEY (Order_Id)
 );
 
@@ -39,5 +36,5 @@ CREATE TABLE Customer_Orders(
 CREATE TABLE Customer_Ordered_Product(
     Order_Id integer REFERENCES Customer_Orders(Order_Id),
     Product_Id integer REFERENCES Products(Product_Id),
-    quantity integer,
+    quantity integer
 );
