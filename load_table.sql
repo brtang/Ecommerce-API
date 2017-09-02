@@ -66,5 +66,9 @@ CREATE TABLE IF NOT EXISTS Customer_Ordered_Product(
     quantity integer
 );
 
+SELECT SUM(quantity) 
+FROM Customer_Ordered_Product
+WHERE Product_Id = 1;
+
 /* Insert some Customer Ordered Products data  */
 INSERT INTO Customer_Ordered_Product (Order_Id, Product_Id, quantity) VALUES (1, 1, 20), (1, 3, 5), (2, 4, 15), (2, 6, 18), (2, 5, 7), (2, 3, 5);
