@@ -21,6 +21,7 @@ ORDER BY Product_Id;
 SELECT date_part('year', p.Time_stamp::date) as yearly, date_part('week', p.Time_stamp::date) as weekly, cop.Product_Id, pd.name, SUM(cop.quantity) AS units_sold
 FROM Customer_Orders p INNER JOIN Customer_Ordered_Product cop ON p.Order_Id = cop.Order_Id
 INNER JOIN Products pd ON cop.Product_Id = pd.Product_Id
+WHERE p.Time_stamp BETWEEN '1/7/1999' AND '1/20/1999'
 GROUP BY  yearly, weekly, cop.Product_Id, pd.name
 ORDER BY yearly, weekly; 
 
