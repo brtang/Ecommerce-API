@@ -12,7 +12,6 @@ var app = express();
 app.set('port', process.env.PORT || 8080);
 
 // Middleware
-
 app.use(bodyParser.urlencoded({ extended: true}));
 routes(app);
 

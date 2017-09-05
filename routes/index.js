@@ -8,4 +8,6 @@ var routes = require('express').Router();
 
 module.exports = function(app){
     app.get('/customers', clientController.viewCustomers);
+    
+    app.post('/getOrder', clientController.returnCustomersOrder);
 };
