@@ -1,18 +1,15 @@
 var config = require('../config/config');
 
+// Repos containing DB queries
 var repos = {
-  //  users: require('./repos/users'),
       customers: require('./repos/customers')
 };
 
-
+// Extend database protocol with our custom repos
 var options = {
    
-    // Extending the database protocol with our custom repositories:
     extend: obj => {
-        obj.customers = repos.customers(obj, pgp);
-        //obj.users = repos.users(obj, pgp);
-       
+        obj.customers = repos.customers(obj, pgp);          
     }
 
 };
@@ -26,16 +23,17 @@ var config = {
   port: config.port, 
 };
 
-// Load and initialize pg-promise:
+// Initialize pg-promise:
 var pgp = require('pg-promise')(options);
 
-// Create the database instance:
+// Create DB instance:
 var db = pgp(config);
 
+// Check if DB connection is successful
 db.connect()
     .then(obj => {
         console.log("DB connected");
-        obj.done(); // success, release the connection;
+        obj.done(); 
     })
     .catch(error => {
         console.log('ERROR:', error.message || error);
