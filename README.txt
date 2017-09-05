@@ -17,8 +17,33 @@ routes/index.js contains API endpoints. Business logic is delegated to a control
 load_table.sql creates SQL tables and enters some sample data
 queries.sql was used to test queries through the Postgres client before using them in the API
 
-# Assumptions about the API
+# API Documentation
 
+Responses with status code 200 will have data sent in JSON format
+
+GET /view-customers
+
+GET /view-customer-categories
+
+POST /view-product-breakdown
+
+parameter name: startdate,
+Required: Yes,
+Description: Start date for date filter, format must be in MM/DD/YYYY
+
+parameter name: enddate,
+Required: Yes,
+Description: End date for date filter, format must be in MM/DD/YYYY
+
+parameter name: range,
+Required: No,
+Description: Specifies breakdown by day, week, or month. Default is by day. Breakdown by week requires 'week'. Breakdown by month requires 'month'.
+
+POST /view-order
+
+parameter name: id,
+Required: Yes,
+Description: Customer_Id for which the API will return the orders for
 
 
 # Additional questions
@@ -36,16 +61,17 @@ Furthermore, lookup of an order requires a join which adds more overhead to a qu
 - If Shipt knew exact inventory of stores, and when facing a high traffic and limited supply of particular item, how do
 you distribute the inventory among customers checking out?
 
-If facing a limited supply of a particular item, the UI should inform the user that the particular product is low in quantity
-when a user views that item (eg. 100 items left). In this way, the user is informed that there is a low number items in the case 
-that the user was planning on purchasing a higher quantity of items that there is available. Secondly, Shipt should focus on maximizing 
-the number of satisfied customers rather than a first-come-first-serve algorithm. The problem with a first-come-first-serve approach
-is say with 100 items left of a product, the first customer to order within the high traffic of customers orders 90 of the 100 items. 
+If facing a limited supply of a particular item, the UI should inform the user that the particular product is low in quantity when a user views that item (eg. 100 items left). 
+In this way, the user is informed that there is a low number items in the case that the user was planning on purchasing a higher quantity of items that there is available. 
+Secondly, Shipt should focus on maximizing the number of satisfied customers rather than a first-come-first-serve algorithm. 
+The problem with a first-come-first-serve approach is say with 100 items left of a product, the first customer to order within the high traffic of customers orders 90 of the 100 items. 
 If Shipt allows this customer to place their order, at best only 10 other customers will be able to place their orders assuming they order only one item of the product. 
-Therefore only 11 customers were satisfied while the rest of the customers in the high traffic are left dissatisfied. 
+Therefore only 11 customers will be satisfied while the rest of the customers in the high traffic are left dissatisfied. 
 With that being said, a dynamic programming approach works best with the goal in mind being to maximize the amount of satisfied customers. 
 Customers placing an order should be placed into a waiting queue with their order quantity for the product. 
-The customers who want to purchase a low amount of the product should have their orders placed to maximize the amount of satisfied customers. 
-After a certain amount of time in the waiting queue, customers who were not able to have their order placed should be informed that they 
-will be notified when the product is back in stock. With this approach, Shipt is able to satisfy and distribute their limited inventory to the most amount of customers.
+The customers who want to purchase the least amount of the product in the queue should have their orders placed to maximize the amount of satisfied customers. 
+If there are multiple customers who want to purchase the least amount, a first-come-first-serve algorithm will be used to determine among those orders, whose order is placed first.
+The algorithm will continue placing orders in the waiting queue for whom are ordering the least amount of product in the queue until everybody in the waiting queue has been served or the inventory runs out.
+If the inventory runs out, customers in the waiting queue who were not able to have their order placed should be informed that they will be notified when the product is back in stock. 
+With this approach, Shipt is able to satisfy and distribute their limited inventory to the most amount of customers.
 
